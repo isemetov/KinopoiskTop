@@ -5,25 +5,46 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.kinopoisktop.data.api.RetrofitBuilder
-import com.example.kinopoisktop.data.model.TopFilms
+import com.example.kinopoisktop.data.database.AppDatabase
+import com.example.kinopoisktop.data.database.FilmDB
+import com.example.kinopoisktop.data.model.Film
 import com.example.kinopoisktop.data.repository.FilmsRepository
 import com.example.kinopoisktop.data.state.Result
 import kotlinx.coroutines.*
 import java.lang.Exception
-import java.lang.reflect.TypeVariable
 
 class FilmsViewModel: ViewModel() {
 
     private val filmRepository = FilmsRepository(RetrofitBuilder.apiService)
-    fun getFilm(id: Int) = liveData(Dispatchers.IO) {
-        emit(filmRepository.getFilm(id))
-    }
+    private val appDatabase = AppDatabase.getDatabase()
 
+    private val _localFilms = MutableLiveData<List<FilmDB>>()
+    val localFilms: LiveData<List<FilmDB>>
+        get() = _localFilms
+
+
+    fun getFilmsFromDatabase() =
+        viewModelScope.launch {
+            try {
+                _localFilms.postValue(appDatabase.filmDao().getAllFilms())
+            } catch (exception: Exception) {
+                throw exception
+            }
+        }
+
+    fun setAllFilmsToDatabase(films: List<FilmDB>) =
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                appDatabase.filmDao().insertAllFilms(films)
+                getFilmsFromDatabase()
+            }
+        }
 
     fun getTopFilms(page: Int) = liveData(Dispatchers.IO) {
         emit(Result.Loading)
         try {
-            val resultSuccess = Result.Success(filmRepository.getTopFilms(page))
+            val topFilms = filmRepository.getTopFilms(page)
+            val resultSuccess = Result.Success(topFilms.films)
             emit(resultSuccess)
         } catch (error: Exception) {
             val resultError = Result.Error(error)
@@ -32,6 +53,23 @@ class FilmsViewModel: ViewModel() {
 
     }
 
+    fun getTopFilms() = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            //загрузка всех страниц фильмов в один список
+            var films: List<Film>
+            var topFilms = filmRepository.getTopFilms(1)
+            films = topFilms.films
+            val cntPages = topFilms.pagesCount
+            for (i in 2..cntPages)
+                films += filmRepository.getTopFilms(i).films
+            emit(Result.Success(data = films))
+        } catch (error: Exception) {
+            val resultError = Result.Error(error)
+            emit(resultError)
+
+        }
 
 
+    }
 }
