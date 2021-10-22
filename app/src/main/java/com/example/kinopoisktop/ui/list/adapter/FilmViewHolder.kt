@@ -16,13 +16,13 @@ class FilmViewHolder(
         binding.posterPreview.load(film.posterUrlPreview)
 
         //выгрузка жанров из списка Genres
-//        var genres: String = ""
-//        for (i in 0..film.genres.size-1) {
-//            if (i != film.genres.size-1)
-//                genres += film.genres[i].genre + ", "
-//            else genres += film.genres[i].genre
-//        }
-//        binding.genre.text = genres
+        var genres: String = ""
+        for (i in 0..film.genres.size-1) {
+            if (i != film.genres.size-1)
+                genres += film.genres[i].genre + ", "
+            else genres += film.genres[i].genre
+        }
+        binding.genre.text = genres
 
 
             binding.root.setOnClickListener {

@@ -18,4 +18,7 @@ interface FilmDao {
 
     @Query("SELECT * FROM films")
     suspend fun getAllFilms(): List<FilmDB>
+
+    @Query("SELECT * FROM films WHERE (filmId=1)")
+    suspend fun getFilm(): FilmDB
 }

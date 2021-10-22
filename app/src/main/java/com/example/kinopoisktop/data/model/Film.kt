@@ -13,10 +13,10 @@ data class Film(
     val year: String,
     @SerializedName("filmLength")
     val filmLength: String,
-//    @SerializedName("countries")
-//    val countries: List<Countries>,
-//    @SerializedName("genres")
-//    val genres: List<Genres>,
+    @SerializedName("countries")
+    val countries: List<Countries>,
+    @SerializedName("genres")
+    val genres: List<Genres>,
     @SerializedName("rating")
     val rating: String,
     @SerializedName("ratingVoteCount")
@@ -26,11 +26,13 @@ data class Film(
     @SerializedName("posterUrlPreview")
     val posterUrlPreview: String,
     @SerializedName("slogan")
-    val slogan: String,
+    val slogan: String?,
     @SerializedName("description")
-    val description: String,
+    val description: String?,
     @SerializedName("ratingKinopoisk")
-    val ratingKinopoisk: String,
+    val ratingKinopoisk: String?,
+    @SerializedName("webUrl")
+    val webUrl: String?,
 
 
 

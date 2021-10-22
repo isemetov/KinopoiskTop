@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kinopoisktop.R
@@ -34,6 +36,7 @@ class FilmsListFragment : Fragment(), FilmsListAdapter.FilmItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
     }
 
     override fun onCreateView(
@@ -41,8 +44,11 @@ class FilmsListFragment : Fragment(), FilmsListAdapter.FilmItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        return view
     }
 
 
@@ -53,7 +59,7 @@ class FilmsListFragment : Fragment(), FilmsListAdapter.FilmItemClickListener {
         binding.filmsListRecycler.layoutManager = LinearLayoutManager(context)
         filmsViewModel = ViewModelProvider(this).get(FilmsViewModel::class.java)
 
-        filmsViewModel.getTopFilms(1).observe(viewLifecycleOwner) { result ->
+        filmsViewModel.getTopFilms().observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.filmsListRecycler.visibility = View.GONE
@@ -64,28 +70,26 @@ class FilmsListFragment : Fragment(), FilmsListAdapter.FilmItemClickListener {
                     binding.progressBar.visibility = View.GONE
                     binding.filmsListRecycler.adapter = FilmsListAdapter(result.data, this)
 
-
-                    filmsViewModel.setAllFilmsToDatabase(
-                        films = result.data.map { film ->
-                            FilmDB(
-                                filmId = film.filmId,
-                                nameRu = film.nameRu,
-                                nameEn = film.nameEn,
-                                year = film.year,
-                                filmLength = film.filmLength,
-//                                countries = film.countries,
-//                                genres = film.genres,
-                                rating = film.rating,
-                                ratingVoteCount = film.ratingVoteCount,
-                                posterUrl = film.posterUrl,
-                                posterUrlPreview = film.posterUrlPreview,
-                                slogan = film.slogan,
-                                description = film.description,
-                                ratingKinopoisk = film.ratingKinopoisk
-                            )
-                        }
-                    )
-                    Log.d("hello", "sdfsdf")
+//                    filmsViewModel.setAllFilmsToDatabase(
+//                        films = result.data.map { film ->
+//                            FilmDB(
+//                                filmId = film.filmId,
+//                                nameRu = film.nameRu,
+//                                nameEn = film.nameEn,
+//                                year = film.year,
+//                                filmLength = film.filmLength,
+////                                countries = film.countries,
+////                                genres = film.genres,
+//                                rating = film.rating,
+//                                ratingVoteCount = film.ratingVoteCount,
+//                                posterUrl = film.posterUrl,
+//                                posterUrlPreview = film.posterUrlPreview,
+//                                slogan = film.slogan,
+//                                description = film.description,
+//                                ratingKinopoisk = film.ratingKinopoisk
+//                            )
+//                        }
+//                    )
                 }
                 is Result.Error -> {
                     binding.filmsListRecycler.visibility = View.GONE
@@ -97,7 +101,6 @@ class FilmsListFragment : Fragment(), FilmsListAdapter.FilmItemClickListener {
         }
 
         filmsViewModel.localFilms.observe(viewLifecycleOwner) {
-           Log.d("hello", "hello")
         }
 
 

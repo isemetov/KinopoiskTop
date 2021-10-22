@@ -10,31 +10,31 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "films")
 data class FilmDB(
     @PrimaryKey
-    val filmId: String,
+    val filmId: Int,
     @ColumnInfo(name = "nameRu")
     val nameRu: String,
-    @ColumnInfo(name = "nameEn")
-    val nameEn: String,
+//    @ColumnInfo(name = "nameEn")
+//    val nameEn: String,
     @ColumnInfo(name = "year")
     val year: String,
-    @ColumnInfo(name = "filmLength")
-    val filmLength: String,
+//    @ColumnInfo(name = "filmLength")
+//    val filmLength: String,
  //   @ColumnInfo(name = "countries")
 //    val countries: List<Countries>,
 //    @ColumnInfo(name = "genres")
 //    val genres: List<Genres>,
-    @ColumnInfo(name = "rating")
-    val rating: String,
-    @ColumnInfo(name = "ratingVoteCount")
-    val ratingVoteCount: String,
-    @ColumnInfo(name = "posterUrl")
-    val posterUrl: String,
-    @ColumnInfo(name = "posterUrlPreview")
+//    @ColumnInfo(name = "rating")
+//    val rating: String,
+//    @ColumnInfo(name = "ratingVoteCount")
+//    val ratingVoteCount: String,
+//    @ColumnInfo(name = "posterUrl")
+//    val posterUrl: String,
+//    @ColumnInfo(name = "posterUrlPreview")
     val posterUrlPreview: String,
     @ColumnInfo(name = "slogan")
-    val slogan: String,
+    val slogan: String?,
     @ColumnInfo(name = "description")
-    val description: String,
+    val description: String?,
     @ColumnInfo(name = "ratingKinopoisk")
-    val ratingKinopoisk: String,
+    val ratingKinopoisk: String?,
 )

@@ -1,5 +1,6 @@
 package com.example.kinopoisktop.ui.list
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
